@@ -9,7 +9,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Hello, world!</Text>
+      <Text>Filmly mobile app</Text>
     </View>
   );
 }
