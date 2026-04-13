@@ -1,42 +1,37 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Text, View, StatusBar } from "react-native";
+import { StyleSheet, ScrollView, View, StatusBar } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-
+// UI Components
 import SearchBar from '../../components/ui/SearchBar';
 import BottomTab from '../../components/ui/BottomTab';
+import FeaturedMovie from '../../components/ui/FeaturedMovie';
+import MovieRow from '../../components/ui/MovieRow';
+
+const RECOMMENDED_DATA = [
+  { id: '1', title: 'Interstellar', image: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6vCU67oQvfhO9.jpg' },
+  { id: '2', title: 'Inception', image: 'https://image.tmdb.org/t/p/w500/edv5CZvjRRM89v9PFi6Y20zRbtq.jpg' },
+  { id: '3', title: 'The Dark Knight', image: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDr9p1v3Cmp6sdz2Dxb.jpg' },
+  { id: '4', title: 'Dunkirk', image: 'https://image.tmdb.org/t/p/w500/ebSnODmBhp99AK6oNysvOT35Cpe.jpg' },
+];
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <LinearGradient
-      // Cinematic palette: Dark Purple -> Deep Void -> Midnight Blue
-      colors={['#310550', '#1A002E', '#002366']} 
-      locations={[0, 0.25, 1]} 
-      style={styles.background}
-    >
+    <LinearGradient colors={['#310550', '#1A002E', '#002366']} style={styles.background}>
       <StatusBar barStyle="light-content" />
-      
-      
       <View style={{ flex: 1, paddingTop: insets.top }}>
-        
-        {/* Scrollable content area */}
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <SearchBar />
+          
+         /* <FeaturedMovie /> */
+          
+          <MovieRow title="Recommended" data={RECOMMENDED_DATA} />
+          <MovieRow title="Trending Now" data={RECOMMENDED_DATA} /> 
 
-          <Text style={styles.sectionTitle}>Featured Movies</Text>
-          
-          {/* Temporary spacer to allow scrolling */}
-          <View style={styles.contentSpace} />
-          
         </ScrollView>
-
-       
         <BottomTab /> 
       </View>
     </LinearGradient>
@@ -44,24 +39,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingTop: 10,
-    paddingBottom: 150, 
-  },
-  sectionTitle: {
-    color: '#FFD700',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginLeft: 20,
-    marginTop: 30,
-    textShadowColor: 'rgba(255, 215, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 12
-  },
-  contentSpace: {
-    height: 800, 
-  }
+  background: { flex: 1 },
+  scrollContent: { paddingTop: 10, paddingBottom: 150 },
 });
