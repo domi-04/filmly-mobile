@@ -5,7 +5,7 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { display: 'none' }, // Keeps your custom bar as the only one visible
+        tabBarStyle: { display: 'none' }, // Hide tab bar, we made a custom one
       }}>
       <Tabs.Screen name="index" />
       <Tabs.Screen name="toprated" />
