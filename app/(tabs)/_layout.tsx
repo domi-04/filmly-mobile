@@ -5,14 +5,12 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { display: 'none' },
+        tabBarStyle: { display: 'none' }, // Keeps your custom bar as the only one visible
       }}>
-      <Tabs.Screen 
-        name="index" 
-        options={{ 
-          title: 'Home',
-        }} 
-      />
+      <Tabs.Screen name="index" />
+      <Tabs.Screen name="toprated" />
+      <Tabs.Screen name="watchlist" />
+      <Tabs.Screen name="profile" />
     </Tabs>
   );
 }
