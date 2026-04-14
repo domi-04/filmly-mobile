@@ -10,7 +10,7 @@ export default function SearchBar() {
       <TextInput 
         style={styles.input} 
         placeholder="Search movies, actors..." 
-        placeholderTextColor="#aaa" // Lighter text for dark background
+        placeholderTextColor="#aaa" 
       />
     </View>
   );
@@ -19,15 +19,15 @@ export default function SearchBar() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#2E004B', // Dark Purple
-    borderRadius: 25, // More rounded like your sketch
+    backgroundColor: '#2E004B', 
+    borderRadius: 25, 
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginHorizontal: 20,
     marginTop: 10,
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: '#FFD700', // Subtle Gold border
+    borderColor: '#FFD700',
   },
   icon: {
     marginRight: 10,
@@ -35,6 +35,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#FFFFFF', // White text so it's readable on purple
+    color: '#FFFFFF', 
   },
 });

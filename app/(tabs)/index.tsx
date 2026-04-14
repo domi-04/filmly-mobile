@@ -3,7 +3,6 @@ import { StyleSheet, ScrollView, View, StatusBar } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// UI Components
 import SearchBar from '../../components/ui/SearchBar';
 import BottomTab from '../../components/ui/BottomTab';
 import FeaturedMovie from '../../components/ui/FeaturedMovie';
@@ -20,25 +19,25 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <LinearGradient colors={['#310550', '#1A002E', '#002366']} style={styles.background}>
+    <LinearGradient 
+      colors={['#310550', '#1A002E', '#002366']} 
+      style={{ flex: 1 }}
+    >
       <StatusBar barStyle="light-content" />
       <View style={{ flex: 1, paddingTop: insets.top }}>
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <ScrollView 
+          contentContainerStyle={{ paddingBottom: 150 }} 
+          showsVerticalScrollIndicator={false}
+        >
           <SearchBar />
-          
-         /* <FeaturedMovie /> */
+          <FeaturedMovie />
           
           <MovieRow title="Recommended" data={RECOMMENDED_DATA} />
-          <MovieRow title="Trending Now" data={RECOMMENDED_DATA} /> 
+          <MovieRow title="Trending Now" data={RECOMMENDED_DATA} />
 
         </ScrollView>
-        <BottomTab /> 
+        <BottomTab />
       </View>
     </LinearGradient>
   );
 }
-
-const styles = StyleSheet.create({
-  background: { flex: 1 },
-  scrollContent: { paddingTop: 10, paddingBottom: 150 },
-});

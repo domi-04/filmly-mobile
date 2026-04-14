@@ -11,7 +11,6 @@ export default function FeaturedMovie() {
           style={styles.image}
         />
         <LinearGradient 
-          // 'transparent' is a string, make sure it's spelled right!
           colors={['transparent', 'rgba(26, 0, 46, 0.95)']} 
           style={styles.gradient}
         >
