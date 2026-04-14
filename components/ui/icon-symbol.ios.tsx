@@ -1,4 +1,4 @@
-// Component from example app
+
 
 import { SymbolView, SymbolViewProps, SymbolWeight } from 'expo-symbols';
 import { StyleProp, ViewStyle } from 'react-native';
