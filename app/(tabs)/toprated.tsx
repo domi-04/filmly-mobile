@@ -27,19 +27,19 @@ export default function TopRated() {
           colors={['#310550', '#1A002E', '#002366']} 
           style={{ flex: 1 }}
         >
-          <StatusBar barStyle="light-content" />
-          <View style={{ flex: 1, paddingTop: insets.top }}>
-            <ScrollView 
-              contentContainerStyle={{ paddingBottom: 150 }} // padding bottom to ensure content is not hidden behind the BottomTab
-              showsVerticalScrollIndicator={false}
-            >
-              <SearchBar />
+      <StatusBar barStyle="light-content" />
+        <View style={{ flex: 1, paddingTop: insets.top }}>
+          <ScrollView 
+            contentContainerStyle={{ paddingBottom: 150 }} // padding bottom to ensure content is not hidden behind the BottomTab
+            showsVerticalScrollIndicator={false}
+          >
+            <SearchBar />
               
-              <MovieRow title="Top-rated movies" data={top_rated_sorted} showRatings={true} showRanking={true} />
-              <MovieRow title="Movies on fire" data={on_fire_sorted} showRanking={true} />
+            <MovieRow title="Top-rated movies" data={top_rated_sorted} showRatings={true} showRanking={true} />
+            <MovieRow title="Movies on fire" data={on_fire_sorted} showRanking={true} />
     
-            </ScrollView>
-          </View>
-        </LinearGradient>
+          </ScrollView>
+        </View>
+    </LinearGradient>
   );
 }
