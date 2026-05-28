@@ -31,6 +31,7 @@ export default function Watchlist() {
           <StatusBar barStyle="light-content" />
             <View style={{ flex: 1, paddingTop: insets.top }}>
               <ScrollView 
+                scrollEnabled={true}
                 contentContainerStyle={{ paddingBottom: 150 }} // padding bottom to ensure content is not hidden behind the BottomTab
                 showsVerticalScrollIndicator={false}
               >
