@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 
 interface Movie {
   id: string;
@@ -8,7 +8,7 @@ interface Movie {
   rating?: number;
 }
 
-interface MovieRowProps {
+interface MovieGridProps {
   title: string;
   data: Movie[];
   showRatings?: boolean;
@@ -16,18 +16,33 @@ interface MovieRowProps {
   showTitle?: boolean;
 }
 
-export default function MovieRow({ title, data, showRatings = false, showRanking = false, showTitle = true }: MovieRowProps) {
+export default function MovieGrid({ title, data, showRatings = false, showRanking = false, showTitle = true }: MovieGridProps) {
+  const { width } = useWindowDimensions();
+
+  const numColumns = useMemo(() => {
+    if (width < 500) return 2;
+    if (width < 900) return 3;
+    return 4;
+  }, [width]);
+
+  const cardWidth = useMemo(() => {
+    const padding = 20;
+    return (width - padding) / numColumns - 10;
+  }, [width, numColumns]);
+
   return (
     <View style={styles.container}>
       {showTitle && <Text style={styles.sectionTitle}>{title}</Text>}
-      <FlatList 
-        horizontal
+      <FlatList
+        key={`grid-${numColumns}`}
         data={data}
         keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
+        numColumns={numColumns}
+        columnWrapperStyle={styles.columnWrapper}
+        scrollEnabled={false}
         contentContainerStyle={styles.listContent}
         renderItem={({ item, index }) => (
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={[styles.card, { width: cardWidth }]}>
             <View style={styles.cardContent}>
               {showRanking && (
                 <View style={styles.rankingNumber}>
@@ -64,9 +79,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
-  listContent: { paddingLeft: 20, paddingRight: 10 },
-  card: { marginRight: 18 },
-  cardContent: { flexDirection: 'row', alignItems: 'flex-start' },
+  listContent: { paddingLeft: 10, paddingRight: 10 },
+  columnWrapper: { justifyContent: 'flex-start', marginBottom: 10 },
+  card: { alignItems: 'center' },
+  cardContent: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center' },
   rankingNumber: {
     width: 32,
     paddingTop: 8,
@@ -90,5 +106,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ratingText: { color: '#000', fontSize: 12, fontWeight: 'bold' },
-  movieTitle: { color: '#E0E0E0', fontSize: 13, marginTop: 10, textAlign: 'center' }
+  movieTitle: { color: '#E0E0E0', fontSize: 13, marginTop: 10, textAlign: 'center', width: 130 }
 });

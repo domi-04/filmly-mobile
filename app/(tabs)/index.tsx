@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, StatusBar } from "react-native";
+
+import { ScrollView, View, StatusBar } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import SearchBar from '../../components/ui/SearchBar';
-import BottomTab from '../../components/ui/BottomTab';
 import FeaturedMovie from '../../components/ui/FeaturedMovie';
 import MovieRow from '../../components/ui/MovieRow';
 
@@ -26,7 +26,7 @@ export default function HomeScreen() {
       <StatusBar barStyle="light-content" />
       <View style={{ flex: 1, paddingTop: insets.top }}>
         <ScrollView 
-          contentContainerStyle={{ paddingBottom: 150 }} 
+          contentContainerStyle={{ paddingBottom: 150 }} // padding bottom to ensure content is not hidden behind the BottomTab
           showsVerticalScrollIndicator={false}
         >
           <SearchBar />
@@ -36,7 +36,6 @@ export default function HomeScreen() {
           <MovieRow title="Trending Now" data={RECOMMENDED_DATA} />
 
         </ScrollView>
-        <BottomTab />
       </View>
     </LinearGradient>
   );
