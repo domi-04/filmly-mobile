@@ -1,63 +1,109 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function FeaturedMovie() {
+// 1. Define what properties our movie object must contain
+interface FeaturedMovieProps {
+  movie: {
+    id: string;
+    title: string;
+    image: string;
+    backdrop?: string;
+    overview?: string;
+  } | null;
+}
+
+export default function FeaturedMovie({ movie }: FeaturedMovieProps) {
+  
+  // Loading state fallback that keeps the exact same card sizing
+  if (!movie) {
+    return (
+      <View style={[styles.cardContainer, { backgroundColor: '#1A002E', justifyContent: 'center', alignItems: 'center' }]} />
+    );
+  }
+
+  // Use backdrop if available, otherwise standard poster image
+  const displayImage = movie.backdrop || movie.image;
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.9} style={styles.card}>
-        <Image 
-          source={{ uri: 'https://image.tmdb.org/t/p/original/8Gxv2mYqlUjXw9S7QZojS0YIuwi.jpg' }} 
-          style={styles.image}
-        />
-        <LinearGradient 
-          colors={['transparent', 'rgba(26, 0, 46, 0.95)']} 
+    // The main wrapper that controls the outer card placement, margins, and borders
+    <View style={styles.cardContainer}>
+      <ImageBackground 
+        source={{ uri: displayImage }} 
+        style={styles.imageBackground}
+        resizeMode="cover"
+        // This ensures the image inside obeys the card's rounded corners
+        imageStyle={{ borderRadius: 24 }} 
+      >
+        {/* Gradients blending up from the bottom to keep the text highly readable */}
+        <LinearGradient
+          colors={['transparent', 'rgba(26, 0, 46, 0.7)', '#1A002E']}
           style={styles.gradient}
         >
-          <Text style={styles.title}>Dune: Part Two</Text>
-          <Text style={styles.subtitle}>Epic • Sci-Fi • 2h 46m</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.title} numberOfLines={2}>
+              {movie.title}
+            </Text>
+            
+            {movie.overview ? (
+              <Text style={styles.overview} numberOfLines={3}>
+                {movie.overview}
+              </Text>
+            ) : null}
+          </View>
         </LinearGradient>
-      </TouchableOpacity>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    paddingHorizontal: 20, 
-    marginTop: 25 
-  },
-  card: {
-    height: 220,
-    borderRadius: 25,
-    overflow: 'hidden',
-    backgroundColor: '#111',
+  cardContainer: {
+    height: 380,                 
+    marginHorizontal: 16,       
+    marginTop: 10,
+    marginBottom: 25,
+    borderRadius: 24,            
     borderWidth: 1,
-    borderColor: 'rgba(255, 215, 0, 0.3)',
+    borderColor: '#FFD700',     
+    backgroundColor: '#1A002E',
+    overflow: 'hidden',        
+    
+   
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 6,
   },
-  image: { 
-    width: '100%', 
-    height: '100%', 
-    resizeMode: 'cover' 
+  imageBackground: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   gradient: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '70%',
+    height: '75%',
     justifyContent: 'flex-end',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
-  title: { 
-    color: '#fff', 
-    fontSize: 28, 
-    fontWeight: 'bold' 
+  textContainer: {
+    width: '100%',
   },
-  subtitle: { 
-    color: '#FFD700', 
-    fontSize: 14, 
-    marginTop: 4, 
-    fontWeight: '500' 
+  title: {
+    color: '#FFFFFF',
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
+  },
+  overview: {
+    color: '#CCCCCC',
+    fontSize: 13,
+    lineHeight: 18,
+    textShadowColor: 'rgba(0, 0, 0, 0.9)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
 });

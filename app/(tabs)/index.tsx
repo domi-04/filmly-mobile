@@ -1,6 +1,5 @@
-import React from 'react';
-
-import { ScrollView, View, StatusBar } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, StatusBar, ActivityIndicator } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,15 +7,79 @@ import SearchBar from '../../components/ui/SearchBar';
 import FeaturedMovie from '../../components/ui/FeaturedMovie';
 import MovieRow from '../../components/ui/MovieRow';
 
-const RECOMMENDED_DATA = [
-  { id: '1', title: 'Interstellar', image: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6vCU67oQvfhO9.jpg' },
-  { id: '2', title: 'Inception', image: 'https://image.tmdb.org/t/p/w500/edv5CZvjRRM89v9PFi6Y20zRbtq.jpg' },
-  { id: '3', title: 'The Dark Knight', image: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDr9p1v3Cmp6sdz2Dxb.jpg' },
-  { id: '4', title: 'Dunkirk', image: 'https://image.tmdb.org/t/p/w500/ebSnODmBhp99AK6oNysvOT35Cpe.jpg' },
-];
+interface Movie {
+  id: string;
+  title: string;
+  image: string;
+  backdrop?: string; // Optional backdrop for the big hero banner
+  overview?: string; // Optional description for the featured movie
+}
+
+// Base URL configuration pointing to  local Express server
+const BASE_URL = 'http://10.159.207.241:5000/api/movies';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  
+  // Separate states for  three different UI data sections
+  const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
+  const [recommendedMovies, setRecommendedMovies] = useState<Movie[]>([]);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllHomeData = async () => {
+      try {
+       
+        const [trendingRes, topRatedRes, popularRes] = await Promise.all([
+          fetch(`${BASE_URL}/trending`),
+          fetch(`${BASE_URL}/toprated`),
+          fetch(`${BASE_URL}/popular`)
+        ]);
+
+        const trendingData = await trendingRes.json();
+        const topRatedData = await topRatedRes.json();
+        const popularData = await popularRes.json();
+
+       
+        const formatMovies = (rawList: any) => {
+          const list = rawList.results || rawList || [];
+          return list.map((movie: any) => {
+            const poster = movie.poster_path || movie.image || movie.poster || '';
+            const backdrop = movie.backdrop_path || movie.backdrop || '';
+            
+            return {
+              id: (movie.id || movie.movie_id || Math.random()).toString(),
+              title: movie.title || movie.name || movie.movie_title || 'Unknown Title',
+              image: poster.startsWith('http') ? poster : `https://image.tmdb.org/t/p/w500${poster}`,
+              backdrop: backdrop.startsWith('http') ? backdrop : `https://image.tmdb.org/t/p/w1280${backdrop}`,
+              overview: movie.overview || ''
+            };
+          });
+        };
+
+        const formattedTrending = formatMovies(trendingData);
+        const formattedTopRated = formatMovies(topRatedData);
+        const formattedPopular = formatMovies(popularData);
+
+       
+        setTrendingMovies(formattedTrending.slice(0, 8));
+        setRecommendedMovies(formattedTopRated.slice(0, 8));
+        
+       
+        if (formattedPopular.length > 0) {
+          setFeaturedMovie(formattedPopular[0]);
+        }
+
+      } catch (error) {
+        console.error("🔴 Error pulling full home page data package:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllHomeData();
+  }, []);
 
   return (
     <LinearGradient 
@@ -26,14 +89,22 @@ export default function HomeScreen() {
       <StatusBar barStyle="light-content" />
       <View style={{ flex: 1, paddingTop: insets.top }}>
         <ScrollView 
-          contentContainerStyle={{ paddingBottom: 150 }} // padding bottom to ensure content is not hidden behind the BottomTab
+          contentContainerStyle={{ paddingBottom: 150 }} 
           showsVerticalScrollIndicator={false}
         >
           <SearchBar />
-          <FeaturedMovie />
           
-          <MovieRow title="Recommended" data={RECOMMENDED_DATA} />
-          <MovieRow title="Trending Now" data={RECOMMENDED_DATA} />
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FFD700" style={{ marginTop: 40 }} />
+          ) : (
+            <>
+              <FeaturedMovie movie={featuredMovie} />
+              
+              <MovieRow title="Recommended" data={recommendedMovies} />
+              
+              <MovieRow title="Trending Now" data={trendingMovies} />
+            </>
+          )}
 
         </ScrollView>
       </View>
