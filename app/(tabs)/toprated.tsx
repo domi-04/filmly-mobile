@@ -16,7 +16,7 @@ interface Movie {
 }
 
 // Pointing directly to your local Express server
-const BASE_URL = 'http://10.159.207.241:5000/api/movies';
+const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
 
 export default function TopRated() {
   const insets = useSafeAreaInsets();
