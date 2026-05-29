@@ -8,6 +8,7 @@ interface Movie {
   image: string;
   rating?: number;        // Optional property
   recent_rating?: number; // Optional property
+  tmdb_rank?: number;     // Optional TMDB rank for sorting
 }
 
 interface MovieRowProps {
@@ -37,9 +38,9 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
                 resizeMode="cover"
               />
 
-              {showRanking && (
+              {showRanking && item.tmdb_rank !== undefined && (
                 <View style={styles.rankingBadge}>
-                  <Text style={styles.rankingText}>{index + 1}</Text>
+                  <Text style={styles.rankingText}>#{item.tmdb_rank}</Text>
                 </View>
               )}
             </View>

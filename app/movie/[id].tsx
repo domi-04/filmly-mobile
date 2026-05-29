@@ -14,6 +14,7 @@ import {
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { API_URL } from '@/utils/api';
 
 const { width } = Dimensions.get('window');
 
@@ -25,7 +26,7 @@ interface DetailedMovie {
   overview?: string;
 }
 
-const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
+const BASE_URL = `${API_URL}/api/movies`;
 
 export default function MovieDetails() {
   const { id } = useLocalSearchParams();

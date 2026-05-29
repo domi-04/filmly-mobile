@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router'; // 1. Import the router hook
 
 import SearchBar from '../../components/ui/SearchBar';
+import { API_URL } from '@/utils/api';
 
 const { width } = Dimensions.get('window');
 
@@ -17,7 +18,7 @@ interface Movie {
 }
 
 // Pointing directly to your local Express server
-const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
+const BASE_URL = `${API_URL}/api/movies`;
 
 export default function TopRated() {
   const insets = useSafeAreaInsets();

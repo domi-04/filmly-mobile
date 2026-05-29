@@ -7,16 +7,19 @@ import SearchBar from '../../components/ui/SearchBar';
 import FeaturedMovie from '../../components/ui/FeaturedMovie';
 import MovieRow from '../../components/ui/MovieRow';
 
+import { API_URL } from '@/utils/api';
+
 interface Movie {
   id: string;
   title: string;
   image: string;
   backdrop?: string; // Optional backdrop for the big hero banner
   overview?: string; // Optional description for the featured movie
+  tmdb_rank?: number; // Optional TMDB rank for sorting
 }
 
 // Base URL configuration pointing to  local Express server
-const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
+const BASE_URL = `${API_URL}/api/movies`;
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -49,6 +52,7 @@ export default function HomeScreen() {
             const backdrop = movie.backdrop_path || movie.backdrop || '';
             
             return {
+              ...movie,
               id: (movie.id || movie.movie_id || Math.random()).toString(),
               title: movie.title || movie.name || movie.movie_title || 'Unknown Title',
               image: poster.startsWith('http') ? poster : `https://image.tmdb.org/t/p/w500${poster}`,
@@ -58,17 +62,26 @@ export default function HomeScreen() {
           });
         };
 
+        const sortByRank = (movies: Movie[]) => {
+          return movies.sort((a: any, b: any) => {
+            const rankA = a.tmdb_rank ?? Infinity;
+            const rankB = b.tmdb_rank ?? Infinity;
+            return rankA - rankB;
+          });
+        };
+
         const formattedTrending = formatMovies(trendingData);
         const formattedTopRated = formatMovies(topRatedData);
         const formattedPopular = formatMovies(popularData);
 
        
-        setTrendingMovies(formattedTrending.slice(0, 8));
-        setRecommendedMovies(formattedTopRated.slice(0, 8));
+        setTrendingMovies(sortByRank(formattedTrending).slice(0, 8));
+        setRecommendedMovies(sortByRank(formattedTopRated).slice(0, 8));
         
        
-        if (formattedPopular.length > 0) {
-          setFeaturedMovie(formattedPopular[0]);
+        const sortedPopular = sortByRank(formattedPopular);
+        if (sortedPopular.length > 0) {
+          setFeaturedMovie(sortedPopular[0]);
         }
 
       } catch (error) {
@@ -80,6 +93,7 @@ export default function HomeScreen() {
 
     fetchAllHomeData();
   }, []);
+
 
   return (
     <LinearGradient 
