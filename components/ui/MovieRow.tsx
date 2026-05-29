@@ -30,7 +30,6 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
         {data.map((item, index) => (
           <TouchableOpacity key={item.id} activeOpacity={0.8} style={styles.movieCardWrapper}>
             
-            {/* The Gold-Border Poster Frame */}
             <View style={styles.imageContainer}>
               <Image 
                 source={{ uri: item.image }} 
@@ -38,7 +37,6 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
                 resizeMode="cover"
               />
 
-              {/* OPTIONAL: If the page wants to display top rankings (1, 2, 3...) inside the gold frame */}
               {showRanking && (
                 <View style={styles.rankingBadge}>
                   <Text style={styles.rankingText}>{index + 1}</Text>
@@ -50,7 +48,6 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
               {item.title}
             </Text>
 
-            {/* OPTIONAL: If the page wants to display star ratings underneath the title */}
             {showRatings && item.rating ? (
               <Text style={styles.ratingText}>⭐ {item.rating.toFixed(1)}</Text>
             ) : null}
@@ -87,10 +84,10 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#FFD700', // Our signature gold outline frame!
+    borderColor: '#FFD700', 
     overflow: 'hidden',
     backgroundColor: '#1A002E',
-    position: 'relative',   // Allows absolute badges inside it
+    position: 'relative',   
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -113,7 +110,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     left: 8,
-    backgroundColor: 'rgba(255, 215, 0, 0.9)', // Semitransparent gold badge
+    backgroundColor: 'rgba(255, 215, 0, 0.9)', 
     borderRadius: 12,
     width: 24,
     height: 24,

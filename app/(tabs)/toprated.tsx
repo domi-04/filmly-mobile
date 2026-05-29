@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, ImageBackground, StatusBar, ActivityIndicator, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router'; // 1. Import the router hook
 
 import SearchBar from '../../components/ui/SearchBar';
 
@@ -20,6 +21,7 @@ const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
 
 export default function TopRated() {
   const insets = useSafeAreaInsets();
+  const router = useRouter(); // 2. Initialize the router instance
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -86,7 +88,12 @@ export default function TopRated() {
               const ranking = index + 1;
 
               return (
-                <TouchableOpacity key={item.id} activeOpacity={0.85} style={styles.cardContainer}>
+                // 3. Added dynamic route pushing block inside the card container wrapper
+                <TouchableOpacity 
+                  key={item.id} 
+                  activeOpacity={0.85} 
+                  style={styles.cardContainer}
+                  onPress={() => router.push({ pathname: `/movie/${item.id}` as any })}                >
                   <ImageBackground 
                     source={{ uri: displayImage }} 
                     style={styles.imageBackground}
