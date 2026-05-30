@@ -50,6 +50,7 @@ export default function MovieDetails() {
   ]);
 
   useEffect(() => {
+    console.log("🎬 Fetching details for movie ID:", id);
     const fetchMovieDetail = async () => {
       try {
         // Pozivamo novu faks rutu: /api/movies/movie/{id}

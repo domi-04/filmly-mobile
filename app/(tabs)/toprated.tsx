@@ -11,6 +11,7 @@ const { width } = Dimensions.get('window');
 
 interface Movie {
   id: string;
+  movie_id: string;
   title: string;
   image: string;
   backdrop?: string;
@@ -42,6 +43,7 @@ export default function TopRated() {
           
           return {
             id: (movie.id || movie.movie_id || Math.random()).toString(),
+            movie_id: movie.movie_id ? movie.movie_id.toString() : Math.random().toString(),
             title: movie.title || movie.name || movie.movie_title || 'Unknown Title',
             image: poster.startsWith('http') ? poster : `https://image.tmdb.org/t/p/w500${poster}`,
             backdrop: backdrop.startsWith('http') ? backdrop : `https://image.tmdb.org/t/p/w1280${backdrop}`,
@@ -94,7 +96,7 @@ export default function TopRated() {
                   key={item.id} 
                   activeOpacity={0.85} 
                   style={styles.cardContainer}
-                  onPress={() => router.push({ pathname: `/movie/${item.id}` as any })}                >
+                  onPress={() => router.push({ pathname: `/movie/${item.movie_id}` as any })}                >
                   <ImageBackground 
                     source={{ uri: displayImage }} 
                     style={styles.imageBackground}
