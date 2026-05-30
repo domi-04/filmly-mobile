@@ -2,26 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StatusBar, ActivityIndicator } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router'; // 👈 1. Uvezen useRouter za navigaciju
 
 import SearchBar from '../../components/ui/SearchBar';
 import FeaturedMovie from '../../components/ui/FeaturedMovie';
 import MovieRow from '../../components/ui/MovieRow';
 
+import { API_URL } from '@/utils/api';
+
 interface Movie {
   id: string;
   title: string;
   image: string;
-  backdrop?: string; // Optional backdrop for the big hero banner
-  overview?: string; // Optional description for the featured movie
+  backdrop?: string;
+  overview?: string;
+  tmdb_rank?: number;
 }
 
-// Base URL configuration pointing to  local Express server
-const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
+const BASE_URL = `${API_URL}/api/movies`;
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter(); // 👈 2. Inicijaliziran router
   
-  // Separate states for  three different UI data sections
   const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
   const [recommendedMovies, setRecommendedMovies] = useState<Movie[]>([]);
   const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
@@ -30,7 +33,6 @@ export default function HomeScreen() {
   useEffect(() => {
     const fetchAllHomeData = async () => {
       try {
-       
         const [trendingRes, topRatedRes, popularRes] = await Promise.all([
           fetch(`${BASE_URL}/trending`),
           fetch(`${BASE_URL}/toprated`),
@@ -41,7 +43,6 @@ export default function HomeScreen() {
         const topRatedData = await topRatedRes.json();
         const popularData = await popularRes.json();
 
-       
         const formatMovies = (rawList: any) => {
           const list = rawList.results || rawList || [];
           return list.map((movie: any) => {
@@ -49,6 +50,7 @@ export default function HomeScreen() {
             const backdrop = movie.backdrop_path || movie.backdrop || '';
             
             return {
+              ...movie,
               id: (movie.id || movie.movie_id || Math.random()).toString(),
               title: movie.title || movie.name || movie.movie_title || 'Unknown Title',
               image: poster.startsWith('http') ? poster : `https://image.tmdb.org/t/p/w500${poster}`,
@@ -58,17 +60,24 @@ export default function HomeScreen() {
           });
         };
 
+        const sortByRank = (movies: Movie[]) => {
+          return movies.sort((a: any, b: any) => {
+            const rankA = a.tmdb_rank ?? Infinity;
+            const rankB = b.tmdb_rank ?? Infinity;
+            return rankA - rankB;
+          });
+        };
+
         const formattedTrending = formatMovies(trendingData);
         const formattedTopRated = formatMovies(topRatedData);
         const formattedPopular = formatMovies(popularData);
 
-       
-        setTrendingMovies(formattedTrending.slice(0, 8));
-        setRecommendedMovies(formattedTopRated.slice(0, 8));
+        setTrendingMovies(sortByRank(formattedTrending).slice(0, 8));
+        setRecommendedMovies(sortByRank(formattedTopRated).slice(0, 8));
         
-       
-        if (formattedPopular.length > 0) {
-          setFeaturedMovie(formattedPopular[0]);
+        const sortedPopular = sortByRank(formattedPopular);
+        if (sortedPopular.length > 0) {
+          setFeaturedMovie(sortedPopular[0]);
         }
 
       } catch (error) {
@@ -80,6 +89,11 @@ export default function HomeScreen() {
 
     fetchAllHomeData();
   }, []);
+
+  // 👈 3. Dodana funkcija koja preusmjerava na detalje filma
+  const handleSelectMovie = (id: string) => {
+    router.push(`/movie/${id}`);
+  };
 
   return (
     <LinearGradient 
@@ -98,11 +112,21 @@ export default function HomeScreen() {
             <ActivityIndicator size="large" color="#FFD700" style={{ marginTop: 40 }} />
           ) : (
             <>
-              <FeaturedMovie movie={featuredMovie} />
+              {/* Ovdje također možeš proslijediti klik ako tvoj FeaturedMovie to podržava */}
+              <FeaturedMovie movie={featuredMovie} onPress={handleSelectMovie} />
               
-              <MovieRow title="Recommended" data={recommendedMovies} />
+              {/* 👈 4. Dodan onMoviePress prop u redove */}
+              <MovieRow 
+                title="Recommended" 
+                data={recommendedMovies} 
+                onMoviePress={handleSelectMovie} 
+              />
               
-              <MovieRow title="Trending Now" data={trendingMovies} />
+              <MovieRow 
+                title="Trending Now" 
+                data={trendingMovies} 
+                onMoviePress={handleSelectMovie} 
+              />
             </>
           )}
 

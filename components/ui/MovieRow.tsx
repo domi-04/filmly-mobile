@@ -1,23 +1,24 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-// 1. Updated our interfaces to allow optional properties like ratings and rankings
 interface Movie {
   id: string;
   title: string;
   image: string;
-  rating?: number;        // Optional property
-  recent_rating?: number; // Optional property
+  rating?: number;
+  recent_rating?: number;
+  tmdb_rank?: number;
 }
 
 interface MovieRowProps {
   title: string;
   data: Movie[];
-  showRatings?: boolean;  // Optional flag added to fix the toprated.tsx screen!
-  showRanking?: boolean;  // Optional flag added to fix the toprated.tsx screen!
+  showRatings?: boolean;
+  showRanking?: boolean;
+  onMoviePress?: (id: string) => void; // 👈 Dodano: callback funkcija za klik
 }
 
-export default function MovieRow({ title, data, showRatings, showRanking }: MovieRowProps) {
+export default function MovieRow({ title, data, showRatings, showRanking, onMoviePress }: MovieRowProps) {
   return (
     <View style={styles.rowContainer}>
       <Text style={styles.rowTitle}>{title.toUpperCase()}</Text>
@@ -28,7 +29,12 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
         contentContainerStyle={styles.scrollPadding}
       >
         {data.map((item, index) => (
-          <TouchableOpacity key={item.id} activeOpacity={0.8} style={styles.movieCardWrapper}>
+          <TouchableOpacity 
+            key={item.id} 
+            activeOpacity={0.8} 
+            style={styles.movieCardWrapper}
+            onPress={() => onMoviePress && onMoviePress(item.id)} // 👈 Dodano: okidanje funkcije na klik
+          >
             
             <View style={styles.imageContainer}>
               <Image 
@@ -37,9 +43,9 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
                 resizeMode="cover"
               />
 
-              {showRanking && (
+              {showRanking && item.tmdb_rank !== undefined && (
                 <View style={styles.rankingBadge}>
-                  <Text style={styles.rankingText}>{index + 1}</Text>
+                  <Text style={styles.rankingText}>#{item.tmdb_rank}</Text>
                 </View>
               )}
             </View>
@@ -59,73 +65,16 @@ export default function MovieRow({ title, data, showRatings, showRanking }: Movi
   );
 }
 
+// ... (tvoji postojeći stilovi na dnu ostaju potpuno isti)
 const styles = StyleSheet.create({
-  rowContainer: {
-    marginBottom: 25,
-  },
-  rowTitle: {
-    color: '#FFD700',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginHorizontal: 16,
-    marginBottom: 12,
-    letterSpacing: 1,
-  },
-  scrollPadding: {
-    paddingHorizontal: 12,
-  },
-  movieCardWrapper: {
-    width: 140,
-    marginHorizontal: 6,
-    alignItems: 'center',
-  },
-  imageContainer: {
-    width: '100%',
-    height: 200,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#FFD700', 
-    overflow: 'hidden',
-    backgroundColor: '#1A002E',
-    position: 'relative',   
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  posterImage: {
-    width: '100%',
-    height: '100%',
-  },
-  movieTitle: {
-    color: '#E0E0E0',
-    fontSize: 12,
-    marginTop: 8,
-    textAlign: 'center',
-    width: '100%',
-    paddingHorizontal: 4,
-  },
-  rankingBadge: {
-    position: 'absolute',
-    bottom: 8,
-    left: 8,
-    backgroundColor: 'rgba(255, 215, 0, 0.9)', 
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rankingText: {
-    color: '#1A002E',
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  ratingText: {
-    color: '#FFD700',
-    fontSize: 11,
-    marginTop: 2,
-    fontWeight: '600',
-  }
+  rowContainer: { marginBottom: 25 },
+  rowTitle: { color: '#FFD700', fontSize: 18, fontWeight: 'bold', marginHorizontal: 16, marginBottom: 12, letterSpacing: 1 },
+  scrollPadding: { paddingHorizontal: 12 },
+  movieCardWrapper: { width: 140, marginHorizontal: 6, alignItems: 'center' },
+  imageContainer: { width: '100%', height: 200, borderRadius: 16, borderWidth: 1, borderColor: '#FFD700', overflow: 'hidden', backgroundColor: '#1A002E', position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 },
+  posterImage: { width: '100%', height: '100%' },
+  movieTitle: { color: '#E0E0E0', fontSize: 12, marginTop: 8, textAlign: 'center', width: '100%', paddingHorizontal: 4 },
+  rankingBadge: { position: 'absolute', bottom: 8, left: 8, backgroundColor: 'rgba(255, 215, 0, 0.9)', borderRadius: 12, width: 24, height: 24, justifyContent: 'center', alignItems: 'center' },
+  rankingText: { color: '#1A002E', fontWeight: 'bold', fontSize: 12 },
+  ratingText: { color: '#FFD700', fontSize: 11, marginTop: 2, fontWeight: '600' }
 });
