@@ -16,6 +16,8 @@ export default function TabsLayout() {
         <Tabs.Screen name="toprated" />
         <Tabs.Screen name="watchlist" />
         <Tabs.Screen name="profile" />
+        <Tabs.Screen name="login" />
+        <Tabs.Screen name="register" />
       </Tabs>
       
       <BottomTab />

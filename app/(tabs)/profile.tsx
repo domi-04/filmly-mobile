@@ -1,6 +1,7 @@
-import { ScrollView, View, StatusBar, Text, Image } from "react-native";
+import { ScrollView, View, StatusBar, Text, Image, Button } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 
 export default function Profile() {
@@ -8,6 +9,8 @@ export default function Profile() {
 
   const profile_picture = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
   
+  const router = useRouter();
+
   return (
     <LinearGradient 
           colors={['#310550', '#1A002E', '#002366']} 
@@ -26,6 +29,10 @@ export default function Profile() {
                   style={{ width: 120, height: 120, borderRadius: 60, marginBottom: 20 }} 
                 />
                 <Text style={{ color: '#fff', fontSize: 24, fontWeight: 'bold' }}>John Doe</Text>
+                <Button 
+                onPress={() => router.push('/login')}
+                title="go to login tab (test)" 
+                />
               </View>
 
               
