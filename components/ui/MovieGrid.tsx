@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, useWindowDim
 
 interface Movie {
   id: string;
+  movie_id?: string;
   title: string;
   image: string;
   rating?: number;

@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, ImageBackground, StatusBar, ActivityIndicator, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router'; // 1. Import the router hook
 
 import SearchBar from '../../components/ui/SearchBar';
+import { API_URL } from '@/utils/api';
 
 const { width } = Dimensions.get('window');
 
 interface Movie {
   id: string;
+  movie_id: string;
   title: string;
   image: string;
   backdrop?: string;
@@ -16,10 +19,11 @@ interface Movie {
 }
 
 // Pointing directly to your local Express server
-const BASE_URL = `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/movies`;
+const BASE_URL = `${API_URL}/api/movies`;
 
 export default function TopRated() {
   const insets = useSafeAreaInsets();
+  const router = useRouter(); // 2. Initialize the router instance
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,6 +43,7 @@ export default function TopRated() {
           
           return {
             id: (movie.id || movie.movie_id || Math.random()).toString(),
+            movie_id: movie.movie_id ? movie.movie_id.toString() : Math.random().toString(),
             title: movie.title || movie.name || movie.movie_title || 'Unknown Title',
             image: poster.startsWith('http') ? poster : `https://image.tmdb.org/t/p/w500${poster}`,
             backdrop: backdrop.startsWith('http') ? backdrop : `https://image.tmdb.org/t/p/w1280${backdrop}`,
@@ -86,7 +91,12 @@ export default function TopRated() {
               const ranking = index + 1;
 
               return (
-                <TouchableOpacity key={item.id} activeOpacity={0.85} style={styles.cardContainer}>
+                // 3. Added dynamic route pushing block inside the card container wrapper
+                <TouchableOpacity 
+                  key={item.id} 
+                  activeOpacity={0.85} 
+                  style={styles.cardContainer}
+                  onPress={() => router.push({ pathname: `/movie/${item.movie_id}` as any })} >
                   <ImageBackground 
                     source={{ uri: displayImage }} 
                     style={styles.imageBackground}
