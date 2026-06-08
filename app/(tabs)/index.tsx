@@ -12,6 +12,7 @@ import { API_URL } from '@/utils/api';
 
 interface Movie {
   id: string;
+  movie_id: string;
   title: string;
   image: string;
   backdrop?: string;
@@ -52,6 +53,7 @@ export default function HomeScreen() {
             return {
               ...movie,
               id: (movie.id || movie.movie_id || Math.random()).toString(),
+              movie_id: movie.movie_id ? movie.movie_id.toString() : Math.random().toString(),
               title: movie.title || movie.name || movie.movie_title || 'Unknown Title',
               image: poster.startsWith('http') ? poster : `https://image.tmdb.org/t/p/w500${poster}`,
               backdrop: backdrop.startsWith('http') ? backdrop : `https://image.tmdb.org/t/p/w1280${backdrop}`,
@@ -91,8 +93,8 @@ export default function HomeScreen() {
   }, []);
 
   // 👈 3. Dodana funkcija koja preusmjerava na detalje filma
-  const handleSelectMovie = (id: string) => {
-    router.push(`/movie/${id}`);
+  const handleSelectMovie = (movieId: string) => {
+    router.push(`/movie/${movieId}`);
   };
 
   return (

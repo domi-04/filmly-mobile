@@ -96,7 +96,7 @@ export default function TopRated() {
                   key={item.id} 
                   activeOpacity={0.85} 
                   style={styles.cardContainer}
-                  onPress={() => router.push({ pathname: `/movie/${item.movie_id}` as any })}                >
+                  onPress={() => router.push({ pathname: `/movie/${item.movie_id}` as any })} >
                   <ImageBackground 
                     source={{ uri: displayImage }} 
                     style={styles.imageBackground}

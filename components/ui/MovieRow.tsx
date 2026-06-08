@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'rea
 
 interface Movie {
   id: string;
+  movie_id?: string;
   title: string;
   image: string;
   rating?: number;
@@ -33,7 +34,7 @@ export default function MovieRow({ title, data, showRatings, showRanking, onMovi
             key={item.id} 
             activeOpacity={0.8} 
             style={styles.movieCardWrapper}
-            onPress={() => onMoviePress && onMoviePress(item.id)} // 👈 Dodano: okidanje funkcije na klik
+            onPress={() => onMoviePress && onMoviePress(item.movie_id || item.id)} // 👈 Dodano: okidanje funkcije na klik
           >
             
             <View style={styles.imageContainer}>

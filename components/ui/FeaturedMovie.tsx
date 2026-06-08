@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface Movie {
   id: string;
+  movie_id?: string;
   title: string;
   image: string;
   backdrop?: string;
@@ -24,7 +25,7 @@ export default function FeaturedMovie({ movie, onPress }: FeaturedMovieProps) {
   return (
     <TouchableOpacity 
       activeOpacity={0.9} 
-      onPress={() => onPress && onPress(movie.id)} 
+      onPress={() => onPress && onPress(movie.movie_id || movie.id)} 
       style={styles.container}
     >
       <ImageBackground source={{ uri: backgroundImage }} style={styles.imageBackground}>

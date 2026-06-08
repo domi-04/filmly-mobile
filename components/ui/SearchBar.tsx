@@ -6,6 +6,7 @@ import { API_URL } from '@/utils/api';
 
 interface SearchResult {
   id: string;
+  movie_id?: string;
   title: string;
   poster_path?: string;
   image?: string;
@@ -35,10 +36,10 @@ export default function SearchBar() {
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
-  const handleSelectMovie = (id: string) => {
+  const handleSelectMovie = (movie_id: string) => {
     setQuery(''); 
     setResults([]);
-    router.push(`/movie/${id}`);
+    router.push(`/movie/${movie_id}`);
   };
 
   return (
@@ -72,7 +73,7 @@ export default function SearchBar() {
               <TouchableOpacity 
                 key={item.id.toString()} 
                 style={styles.suggestionItem} 
-                onPress={() => handleSelectMovie(item.id)}
+                onPress={() => handleSelectMovie(item.movie_id || item.id)}
               >
                 <Image source={{ uri: posterUrl }} style={styles.miniPoster} />
                 <Text style={styles.suggestionText} numberOfLines={1}>
