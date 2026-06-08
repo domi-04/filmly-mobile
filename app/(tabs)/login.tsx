@@ -31,7 +31,7 @@ export default function Login() {
                         source={{ uri: profile_picture }}
                         style={{ width: 120, height: 120, borderRadius: 60, marginBottom: 30 }} 
                     />
-                    <Text style={{ color: '#fff', fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Sign in to filmly.</Text>                  
+                    <Text style={{ color: '#FFD700', fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Sign in to Filmly.</Text>                  
                 </View>
                 <View style={{ width: '80%', alignSelf: 'center', marginTop: 50 }}>
                     <TextInput 
@@ -114,7 +114,7 @@ export default function Login() {
                             onPress={() => console.log("sign in")}
                             activeOpacity={0.7}
                         >
-                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Sign in</Text>
+                            <Text style={{ color: '#FFD700', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Sign in</Text>
                             <Ionicons
                                 name="person-outline"
                                 size={22}
@@ -138,7 +138,7 @@ export default function Login() {
                             onPress={() => router.push('/register')}
                             activeOpacity={0.7}
                         >
-                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Don't have an account? Sign up!</Text>
+                            <Text style={{ color: '#FFD700', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Don't have an account? Sign up!</Text>
                             <Ionicons
                                 name="person-add-outline"
                                 size={22}

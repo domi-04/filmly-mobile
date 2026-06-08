@@ -32,7 +32,7 @@ export default function Register() {
                         source={{ uri: profile_picture }}
                         style={{ width: 120, height: 120, borderRadius: 60, marginBottom: 30 }} 
                     />
-                    <Text style={{ color: '#fff', fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Sign up to filmly.</Text>                  
+                    <Text style={{ color: '#FFD700', fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Sign up to Filmly.</Text>                  
                 </View>
                 <View style={{ width: '80%', alignSelf: 'center', marginTop: 50 }}>
                     <TextInput 
@@ -150,7 +150,7 @@ export default function Register() {
                             onPress={() => console.log("sign up")}
                             activeOpacity={0.7}
                         >
-                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Sign up</Text>
+                            <Text style={{ color: '#FFD700', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Sign up</Text>
                             <Ionicons
                                 name="person-add-outline"
                                 size={22}
@@ -174,7 +174,7 @@ export default function Register() {
                             onPress={() => router.push('/login')}
                             activeOpacity={0.7}
                         >
-                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Already have an account? Sign in!</Text>
+                            <Text style={{ color: '#FFD700', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Already have an account? Sign in!</Text>
                             <Ionicons
                                 name="person-outline"
                                 size={22}
