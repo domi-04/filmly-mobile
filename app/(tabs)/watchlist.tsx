@@ -1,5 +1,7 @@
-import { StyleSheet, ScrollView, View, StatusBar, Text } from "react-native";
+import { StyleSheet, ScrollView, View, StatusBar, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -22,6 +24,8 @@ const RECOMMENDED_DATA = [
 
 export default function Watchlist() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+  
   
   return (
     <LinearGradient 
@@ -38,12 +42,65 @@ export default function Watchlist() {
                 <SearchBar />
 
                 <Text style={styles.title}>Watchlist</Text>
+                <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', marginTop: 25, textAlign: 'center' }}>You must be signed in to see this tab!</Text>
                   
-                <MovieGrid title="Watchlist" data={RECOMMENDED_DATA} showTitle={false} />
+                <View style={{ width: '80%', alignSelf: 'center', marginTop: 50 }}>
+                    <TouchableOpacity
+                            style={{
+                                width: '100%',
+                                height: 50,
+                                flexDirection: 'row',
+                                borderRadius: 10,
+                                backgroundColor: 'rgba(255,255,255,0.12)',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255,255,255,0.15)'
+                            }}
+                            onPress={() => router.push('/login')}
+                            activeOpacity={0.7}
+                        >
+                            <Text style={{ color: '#FFD700', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Sign in</Text>
+                            <Ionicons
+                                name="person-outline"
+                                size={22}
+                                color="rgba(255,255,255,0.8)"
+                            />
+                        </TouchableOpacity>
+
+                    <TouchableOpacity
+                            style={{
+                                width: '100%',
+                                height: 50,
+                                flexDirection: 'row',
+                                borderRadius: 10,
+                                backgroundColor: 'rgba(255,255,255,0.12)',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: 1,
+                                borderColor: 'rgba(255,255,255,0.15)',
+                                marginTop: 15
+                            }}
+                            onPress={() => router.push('/register')}
+                            activeOpacity={0.7}
+                        >
+                            <Text style={{ color: '#FFD700', fontSize: 16, fontWeight: 'bold', marginRight: 10 }}>Sign up</Text>
+                            <Ionicons
+                                name="person-add-outline"
+                                size={22}
+                                color="rgba(255,255,255,0.8)"
+                            />
+                        </TouchableOpacity>
+                </View>
+
+                {/*<MovieGrid title="Watchlist" data={RECOMMENDED_DATA} showTitle={false} />*/}
         
               </ScrollView>
             </View>
         </LinearGradient>
+
+
+
   );
 }
 
@@ -53,7 +110,7 @@ const styles = StyleSheet.create({
     color: '#FFD700',
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 30,
+    marginTop: 50,
     marginBottom: 15,
     textTransform: 'uppercase',
     letterSpacing: 1,
